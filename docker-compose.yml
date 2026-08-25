@@ -25,5 +25,13 @@ services:
     ports:
       - "50021:50021"
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8080:8080"
+
 volumes:
   postgres_test_data:
