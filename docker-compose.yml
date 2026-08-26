@@ -32,6 +32,15 @@ services:
     container_name: backend
     ports:
       - "8080:8080"
+    depends_on:
+      - unittest.db
+    environment:
+      APP_ENV: ${APP_ENV}
+      POSTGRES_USER_UNITTEST: ${POSTGRES_USER_UNITTEST}
+      POSTGRES_PASSWORD_UNITTEST: ${POSTGRES_PASSWORD_UNITTEST}
+      POSTGRES_DB_UNITTEST: ${POSTGRES_DB_UNITTEST}
+      POSTGRES_URL: ${POSTGRES_URL}
+      TZ: Asia/Tokyo
 
 volumes:
   postgres_test_data:

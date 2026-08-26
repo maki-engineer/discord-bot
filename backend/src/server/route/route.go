@@ -1,21 +1,20 @@
 package route
 
 import (
-	"net/http"
+	"discord-bot/src/presentation/member/handler"
 
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes() *gin.Engine {
+func SetupRoutes(memberHandler *handler.MemberHandler) *gin.Engine {
 	r := gin.Default()
 
 	api := r.Group("/api")
+	members := api.Group("/members")
 
-	api.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Welcome to the API",
-		})
-	})
+	{
+		members.GET("", memberHandler.GetMembersByBirthdayMonth)
+	}
 
 	return r
 }
