@@ -14,6 +14,20 @@ func NewMemberUseCase(repo member.MemberRepository) *MemberUseCase {
 	}
 }
 
-func (uc *MemberUseCase) GetMembersByBirthdayMonth(birthdayMonth int) ([]*member.MemberBirthday, error) {
-	return uc.repo.GetMembersByBirthdayMonth(birthdayMonth)
+func (uc *MemberUseCase) GetMembersByBirthdayMonth(birthdayMonth int) ([]MemberBirthdayOutputData, error) {
+	members, err := uc.repo.GetMembersByBirthdayMonth(birthdayMonth)
+	if err != nil {
+		return nil, err
+	}
+
+	outputData := make([]MemberBirthdayOutputData, len(members))
+	for i, member := range members {
+		outputData[i] = MemberBirthdayOutputData{
+			Name:  member.Name,
+			Month: member.Month,
+			Date:  member.Date,
+		}
+	}
+
+	return outputData, nil
 }
