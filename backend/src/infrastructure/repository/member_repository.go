@@ -23,6 +23,7 @@ func (r *MemberRepository) GetMembersByBirthdayMonth(birthdayMonth int) ([]*memb
 		Model(&model.Member{}).
 		Select("name, month, date").
 		Where("month = ?", birthdayMonth).
+		Order("date ASC").
 		Find(&members).Error
 
 	if err != nil {
