@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"discord-bot/src/application/member/usecase"
 	errorDto "discord-bot/src/presentation/dto"
 	memberDto "discord-bot/src/presentation/member/dto"
 	"net/http"
@@ -10,10 +9,10 @@ import (
 )
 
 type MemberHandler struct {
-	useCase *usecase.MemberUseCase
+	useCase MemberUseCase
 }
 
-func NewMemberHandler(useCase *usecase.MemberUseCase) *MemberHandler {
+func NewMemberHandler(useCase MemberUseCase) *MemberHandler {
 	return &MemberHandler{
 		useCase: useCase,
 	}
