@@ -1,0 +1,26 @@
+version: "2"
+
+linters:
+  enable:
+    - staticcheck
+    - errcheck
+    - govet
+    - ineffassign
+    - gocognit
+    - gocyclo
+
+  settings:
+    # 循環的複雑度
+    gocyclo:
+      min-complexity: 10
+
+    # 認知的複雑度
+    gocognit:
+      min-complexity: 10
+
+  exclusions:
+    rules:
+      - path: "_test\\.go$"
+        linters:
+          - gocyclo
+          - gocognit

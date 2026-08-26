@@ -7,6 +7,7 @@ import (
 	"discord-bot/src/infrastructure/repository"
 	"discord-bot/src/presentation/member/handler"
 	"discord-bot/src/server/route"
+	"log"
 )
 
 func main() {
@@ -22,5 +23,7 @@ func main() {
 
 	r := route.SetupRoutes(handler)
 
-	r.Run(":8080")
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal(err)
+	}
 }
