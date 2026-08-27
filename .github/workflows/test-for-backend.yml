@@ -21,6 +21,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          docker compose up -d --build backend unittest.db && 
+          docker compose up -d --build backend unittest-db && 
           docker compose exec backend task test-ci &&
           docker compose down

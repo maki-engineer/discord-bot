@@ -7,7 +7,7 @@ services:
     volumes:
       - ./discord-app:/usr/src/app
 
-  unittest.db:
+  unittest-db:
     image: postgres:latest
     container_name: postgres-db-unittest
     environment:
@@ -35,7 +35,7 @@ services:
     volumes:
       - ./backend:/app
     depends_on:
-      - unittest.db
+      - unittest-db
     environment:
       APP_ENV: ${APP_ENV}
       POSTGRES_USER_UNITTEST: ${POSTGRES_USER_UNITTEST}
