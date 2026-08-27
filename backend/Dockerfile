@@ -1,14 +1,18 @@
-FROM golang:1.25
+FROM golang:1.26
 
 WORKDIR /app
 
 COPY go.mod .
 COPY go.sum .
 
-RUN go mod download
+RUN go mod download && \
+go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest && \
+go install github.com/air-verse/air@latest && \
+go install github.com/uudashr/gocognit/cmd/gocognit@latest && \
+go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
 
 COPY . .
 
 EXPOSE 8080
 
-CMD ["go", "run", "src/cmd/main.go"]
+CMD ["air"]
