@@ -19,23 +19,8 @@ jobs:
       POSTGRES_DB_UNITTEST: ${{ secrets.POSTGRES_DB_UNITTEST }}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Start backend and unittest database
-        run: docker compose up -d --build backend unittest.db
-
-      - name: Wait for unittest database
-        run: |
-          until docker compose exec -T postgres-db-unittest pg_isready \
-            -U "$POSTGRES_USER_UNITTEST" \
-            -d "$POSTGRES_DB_UNITTEST"; do
-            sleep 1
-          done
-
-      - name: Run backend tests
-        run: docker compose exec -T backend task test-ci
-
-      - name: Stop containers
-        if: ${{ always() }}
-        run: docker compose down
+      - uses: actions/checkout@v4
+      - run: |
+          docker compose up -d --build backend unittest.db && 
+          docker compose exec backend task test-ci &&
+          docker compose down
