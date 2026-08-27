@@ -1,0 +1,41 @@
+name: Backend Test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backend/**/*.go'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER_UNITTEST: ${{ secrets.POSTGRES_USER_UNITTEST }}
+      POSTGRES_PASSWORD_UNITTEST: ${{ secrets.POSTGRES_PASSWORD_UNITTEST }}
+      POSTGRES_DB_UNITTEST: ${{ secrets.POSTGRES_DB_UNITTEST }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Start backend and unittest database
+        run: docker compose up -d --build backend unittest.db
+
+      - name: Wait for unittest database
+        run: |
+          until docker compose exec -T unittest.db pg_isready \
+            -U "$POSTGRES_USER_UNITTEST" \
+            -d "$POSTGRES_DB_UNITTEST"; do
+            sleep 1
+          done
+
+      - name: Run backend tests
+        run: docker compose exec -T backend task test-ci
+
+      - name: Stop containers
+        if: ${{ always() }}
+        run: docker compose down -v
