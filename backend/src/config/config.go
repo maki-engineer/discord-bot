@@ -23,7 +23,7 @@ func LoadConfig() Config {
 
 	if env == "unittest" {
 		return Config{
-			Host:     "unittest.db",
+			Host:     "unittest-db",
 			User:     os.Getenv("POSTGRES_USER_UNITTEST"),
 			Password: os.Getenv("POSTGRES_PASSWORD_UNITTEST"),
 			DBName:   os.Getenv("POSTGRES_DB_UNITTEST"),

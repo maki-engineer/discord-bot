@@ -4,20 +4,20 @@ module.exports = {
     await queryInterface.createTable('birthday_for_235_members', {
       name: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       user_id: {
         allowNull: false,
         unique: true,
         defaultValue: '',
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       month: {
         allowNull: false,
         type: Sequelize.INTEGER,
         validate: {
           max: 12,
-          min: 1
+          min: 1,
         },
       },
       date: {
@@ -25,20 +25,20 @@ module.exports = {
         type: Sequelize.INTEGER,
         validate: {
           max: 31,
-          min: 1
+          min: 1,
         },
       },
       created_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updated_at: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface: any, Sequelize: any) => {
-    await queryInterface.dropTable('birtuday_for_235_members');
-  }
+    await queryInterface.dropTable('birthday_for_235_members');
+  },
 };

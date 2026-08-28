@@ -7,8 +7,9 @@ services:
     volumes:
       - ./discord-app:/usr/src/app
 
-  unittest.db:
-    image: postgres:latest
+  unittest-db:
+    # postgres:latest はメジャーバージョンが勝手に上がりCIが壊れるためピン留めする
+    image: postgres:18
     container_name: postgres-db-unittest
     environment:
       POSTGRES_USER: ${POSTGRES_USER_UNITTEST}
@@ -16,8 +17,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB_UNITTEST}
     ports:
       - "5433:5432"
-    volumes:
-      - postgres_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
 
   voicevox-engine:
     image: voicevox/voicevox_engine:cpu-ubuntu20.04-latest
@@ -35,7 +39,9 @@ services:
     volumes:
       - ./backend:/app
     depends_on:
-      - unittest.db
+      # 起動直後は initdb 中で接続できないため、healthcheck の完了を待つ
+      unittest-db:
+        condition: service_healthy
     environment:
       APP_ENV: ${APP_ENV}
       POSTGRES_USER_UNITTEST: ${POSTGRES_USER_UNITTEST}
@@ -43,6 +49,3 @@ services:
       POSTGRES_DB_UNITTEST: ${POSTGRES_DB_UNITTEST}
       POSTGRES_URL: ${POSTGRES_URL}
       TZ: Asia/Tokyo
-
-volumes:
-  postgres_test_data:

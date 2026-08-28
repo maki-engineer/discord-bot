@@ -1,0 +1,55 @@
+name: Backend Test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backend/**/*.go'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER_UNITTEST: ${{ secrets.POSTGRES_USER_UNITTEST }}
+      POSTGRES_PASSWORD_UNITTEST: ${{ secrets.POSTGRES_PASSWORD_UNITTEST }}
+      POSTGRES_DB_UNITTEST: ${{ secrets.POSTGRES_DB_UNITTEST }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Start test database
+        # --wait で healthcheck の完了まで待つ
+        run: docker compose up -d --wait unittest-db
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install discord-app dependencies
+        working-directory: ./discord-app
+        run: npm install --ignore-scripts
+
+      - name: Build discord-app
+        working-directory: ./discord-app
+        run: npm run build
+
+      - name: Run database migrations
+        working-directory: ./discord-app
+        run: npm run migrate
+
+      - name: Build backend image
+        run: docker compose build backend
+
+      - name: Run backend tests
+        # exec ではなく run を使う。exec だとコンテナが air で起動し、
+        # APP_ENV 未設定のため config.LoadConfig() の panic を繰り返してログが汚れる
+        run: docker compose run --rm backend task test-ci
+
+      - name: Stop containers
+        if: ${{ always() }}
+        run: docker compose down -v

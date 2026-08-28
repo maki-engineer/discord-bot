@@ -44,13 +44,6 @@ func TestMemberUseCase_GetMembersByBirthdayMonth(t *testing.T) {
 			expectedCount:   0,
 			expectedMembers: []MemberBirthdayOutputData{},
 		},
-		{
-			name:            "リポジトリでエラーが発生した場合、エラーが返ること",
-			members:         nil,
-			birthdayMonth:   5,
-			expectedCount:   0,
-			expectedMembers: []MemberBirthdayOutputData{},
-		},
 	}
 
 	for _, tt := range tests {

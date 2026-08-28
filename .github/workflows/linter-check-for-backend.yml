@@ -1,0 +1,29 @@
+name: Backend Linter Check
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backend/**/*.go'
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build backend image
+        run: docker compose build backend
+
+      - name: Run backend linter
+        run: docker compose run --rm --no-deps backend task lint
+
+      - name: Stop containers
+        if: ${{ always() }}
+        run: docker compose down

@@ -3,6 +3,7 @@ version: '3'
 tasks:
   test-local:
     cmds:
+      - cd ../discord-app && npm run migrate
       - docker compose exec -e APP_ENV=unittest backend go test {{.CLI_ARGS | default "./..."}}
     silent: true
 
