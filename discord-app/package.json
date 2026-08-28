@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=unittest jest",
+    "test": "npm run migrate && cross-env NODE_ENV=unittest jest",
     "build": "npx tsc",
     "build:watch": "npx tsc --watch",
     "start": "npx ts-node src/main.ts",
