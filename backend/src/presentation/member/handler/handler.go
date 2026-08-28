@@ -29,7 +29,9 @@ func (h *MemberHandler) GetMembersByBirthdayMonth(c *gin.Context) {
 		return
 	}
 
-	members, err := h.useCase.GetMembersByBirthdayMonth(req.BirthdayMonth)
+	ctx := c.Request.Context()
+
+	members, err := h.useCase.GetMembersByBirthdayMonth(ctx, req.BirthdayMonth)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errorDto.ErrorResponse{
 			Result:  "error",

@@ -1,5 +1,7 @@
 package member
 
+import "context"
+
 type MemberRepository interface {
-	GetMembersByBirthdayMonth(birthdayMonth int) ([]*MemberBirthday, error)
+	GetMembersByBirthdayMonth(ctx context.Context, birthdayMonth Month) ([]*MemberBirthday, error)
 }

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"reflect"
 	"testing"
 
@@ -58,7 +59,8 @@ func TestMemberRepository_GetMembersByBirthdayMonth(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := repo.GetMembersByBirthdayMonth(tt.birthdayMonth)
+			month, err := member.NewMonth(tt.birthdayMonth)
+			result, err := repo.GetMembersByBirthdayMonth(context.Background(), month)
 
 			if err != nil {
 				t.Fatalf("Failed to get members by birthday month: %v", err)

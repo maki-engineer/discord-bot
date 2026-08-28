@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"discord-bot/src/application/member/usecase"
 	"discord-bot/src/presentation/member/dto"
 	"encoding/json"
@@ -18,7 +19,7 @@ type MockMemberUseCase struct {
 	err     error
 }
 
-func (m *MockMemberUseCase) GetMembersByBirthdayMonth(birthdayMonth int) ([]usecase.MemberBirthdayOutputData, error) {
+func (m *MockMemberUseCase) GetMembersByBirthdayMonth(ctx context.Context, birthdayMonth int) ([]usecase.MemberBirthdayOutputData, error) {
 	return m.members, m.err
 }
 

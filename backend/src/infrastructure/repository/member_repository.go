@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"discord-bot/src/domain/member"
 	"discord-bot/src/infrastructure/model"
 
@@ -17,9 +18,10 @@ func NewMemberRepository(db *gorm.DB) *MemberRepository {
 	}
 }
 
-func (r *MemberRepository) GetMembersByBirthdayMonth(birthdayMonth int) ([]*member.MemberBirthday, error) {
+func (r *MemberRepository) GetMembersByBirthdayMonth(ctx context.Context, birthdayMonth member.Month) ([]*member.MemberBirthday, error) {
 	var members []*member.MemberBirthday
 	err := r.db.
+		WithContext(ctx).
 		Model(&model.Member{}).
 		Select("name, month, date").
 		Where("month = ?", birthdayMonth).
