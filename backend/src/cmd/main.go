@@ -20,7 +20,6 @@ func main() {
 	repository := repository.NewMemberRepository(db)
 	useCase := usecase.NewMemberUseCase(repository)
 	handler := handler.NewMemberHandler(useCase)
-	// CIが動くか確認
 
 	r := route.SetupRoutes(handler)
 
