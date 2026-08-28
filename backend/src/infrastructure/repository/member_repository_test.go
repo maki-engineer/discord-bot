@@ -60,10 +60,14 @@ func TestMemberRepository_GetMembersByBirthdayMonth(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			month, err := member.NewMonth(tt.birthdayMonth)
+			if err != nil {
+				t.Fatalf("Failed to get month by birthday month: %v", err)
+			}
+
 			result, err := repo.GetMembersByBirthdayMonth(context.Background(), month)
 
 			if err != nil {
-				t.Fatalf("Failed to get members by birthday month: %v", err)
+				t.Fatalf("Failed to get members by month: %v", err)
 			}
 
 			if len(result) != tt.expectedCount {
