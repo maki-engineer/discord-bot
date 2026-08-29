@@ -1,0 +1,48 @@
+name: Update Swagger Docs
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+
+permissions:
+  contents: write
+
+jobs:
+  update-swagger:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch after merge
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+
+      - name: Generate Swagger docs
+        working-directory: backend
+        run: go run github.com/swaggo/swag/cmd/swag@latest init -g src/cmd/main.go -o docs
+
+      - name: Commit Swagger docs if changed
+        run: |
+          if git diff --quiet -- backend/docs; then
+            echo "No Swagger changes detected."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backend/docs
+          git commit -m "chore: update swagger docs"
+          git push origin HEAD:${{ github.event.pull_request.base.ref }}
