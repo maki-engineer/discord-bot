@@ -1,0 +1,64 @@
+basePath: /api
+definitions:
+  dto.ErrorResponse:
+    properties:
+      message:
+        type: string
+      result:
+        type: string
+    type: object
+  dto.GetMembersByBirthdayMonthResponse:
+    properties:
+      members:
+        items:
+          $ref: '#/definitions/dto.MemberBirthday'
+        type: array
+      result:
+        type: string
+    type: object
+  dto.MemberBirthday:
+    properties:
+      date:
+        type: integer
+      month:
+        type: integer
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: 235botのデータを取得・操作するためのAPI
+  license:
+    name: Maki
+  title: 235Bot API
+  version: "1.0"
+paths:
+  /members:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Birthday month (1-12)
+        in: query
+        name: birthday_month
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetMembersByBirthdayMonthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: 指定された月が誕生日のメンバー一覧を取得するAPI
+      tags:
+      - members
+swagger: "2.0"
