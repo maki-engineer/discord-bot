@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"discord-bot/src/domain/member"
 	"errors"
 	"reflect"
@@ -12,7 +13,7 @@ type MockMemberRepository struct {
 	err     error
 }
 
-func (m *MockMemberRepository) GetMembersByBirthdayMonth(birthdayMonth int) ([]*member.MemberBirthday, error) {
+func (m *MockMemberRepository) GetMembersByBirthdayMonth(ctx context.Context, birthdayMonth member.Month) ([]*member.MemberBirthday, error) {
 	return m.members, m.err
 }
 
@@ -54,7 +55,7 @@ func TestMemberUseCase_GetMembersByBirthdayMonth(t *testing.T) {
 			}
 
 			uc := NewMemberUseCase(repo)
-			result, err := uc.GetMembersByBirthdayMonth(tt.birthdayMonth)
+			result, err := uc.GetMembersByBirthdayMonth(context.Background(), tt.birthdayMonth)
 			if err != nil {
 				t.Fatalf("Unexpected error: %v", err)
 			}
@@ -79,7 +80,7 @@ func TestMemberUseCase_GetMembersByBirthdayMonth_RepositoryError(t *testing.T) {
 	}
 
 	uc := NewMemberUseCase(repo)
-	_, err := uc.GetMembersByBirthdayMonth(5)
+	_, err := uc.GetMembersByBirthdayMonth(context.Background(), 5)
 	if err == nil {
 		t.Fatalf("Expected error, but got nil")
 	}

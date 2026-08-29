@@ -1,0 +1,99 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "235botのデータを取得・操作するためのAPI",
+        "title": "235Bot API",
+        "contact": {},
+        "license": {
+            "name": "Maki"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api",
+    "paths": {
+        "/members": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "members"
+                ],
+                "summary": "指定された月が誕生日のメンバー一覧を取得するAPI",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Birthday month (1-12)",
+                        "name": "birthday_month",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetMembersByBirthdayMonthResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "result": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetMembersByBirthdayMonthResponse": {
+            "type": "object",
+            "properties": {
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.MemberBirthday"
+                    }
+                },
+                "result": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.MemberBirthday": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "integer"
+                },
+                "month": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

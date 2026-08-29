@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"discord-bot/src/application/member/usecase"
 	"discord-bot/src/presentation/member/dto"
 	"encoding/json"
@@ -18,7 +19,7 @@ type MockMemberUseCase struct {
 	err     error
 }
 
-func (m *MockMemberUseCase) GetMembersByBirthdayMonth(birthdayMonth int) ([]usecase.MemberBirthdayOutputData, error) {
+func (m *MockMemberUseCase) GetMembersByBirthdayMonth(ctx context.Context, birthdayMonth int) ([]usecase.MemberBirthdayOutputData, error) {
 	return m.members, m.err
 }
 
@@ -36,9 +37,9 @@ func TestMemberHandler_GetMembersByBirthdayMonth(t *testing.T) {
 	handler := NewMemberHandler(mockUseCase)
 
 	router := gin.New()
-	router.GET("/api/member", handler.GetMembersByBirthdayMonth)
+	router.GET("/api/members", handler.GetMembersByBirthdayMonth)
 
-	req := httptest.NewRequest(http.MethodGet, "/api/member?birthday_month=5", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/members?birthday_month=5", nil)
 
 	recorder := httptest.NewRecorder()
 
@@ -82,9 +83,9 @@ func TestMemberHandler_GetMembersByBirthdayMonth_InvalidQueryParam(t *testing.T)
 	handler := NewMemberHandler(mockUseCase)
 
 	router := gin.New()
-	router.GET("/api/member", handler.GetMembersByBirthdayMonth)
+	router.GET("/api/members", handler.GetMembersByBirthdayMonth)
 
-	req := httptest.NewRequest(http.MethodGet, "/api/member?birthday_month=five", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/members?birthday_month=five", nil)
 
 	recorder := httptest.NewRecorder()
 
@@ -105,9 +106,9 @@ func TestMemberHandler_GetMembersByBirthdayMonth_UseCaseError(t *testing.T) {
 	handler := NewMemberHandler(mockUseCase)
 
 	router := gin.New()
-	router.GET("/api/member", handler.GetMembersByBirthdayMonth)
+	router.GET("/api/members", handler.GetMembersByBirthdayMonth)
 
-	req := httptest.NewRequest(http.MethodGet, "/api/member?birthday_month=5", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/members?birthday_month=5", nil)
 
 	recorder := httptest.NewRecorder()
 

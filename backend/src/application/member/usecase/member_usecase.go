@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"discord-bot/src/domain/member"
 )
 
@@ -14,8 +15,13 @@ func NewMemberUseCase(repo member.MemberRepository) *MemberUseCase {
 	}
 }
 
-func (uc *MemberUseCase) GetMembersByBirthdayMonth(birthdayMonth int) ([]MemberBirthdayOutputData, error) {
-	members, err := uc.repo.GetMembersByBirthdayMonth(birthdayMonth)
+func (uc *MemberUseCase) GetMembersByBirthdayMonth(ctx context.Context, birthdayMonth int) ([]MemberBirthdayOutputData, error) {
+	month, err := member.NewMonth(birthdayMonth)
+	if err != nil {
+		return nil, err
+	}
+
+	members, err := uc.repo.GetMembersByBirthdayMonth(ctx, month)
 	if err != nil {
 		return nil, err
 	}

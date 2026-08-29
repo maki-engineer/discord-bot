@@ -10,6 +10,11 @@ import (
 	"log"
 )
 
+// @title 235Bot API
+// @version 1.0
+// @license.name Maki
+// @description 235botのデータを取得・操作するためのAPI
+// @BasePath /api
 func main() {
 	config := config.LoadConfig()
 	db, err := db.NewDB(config)

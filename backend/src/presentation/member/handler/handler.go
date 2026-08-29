@@ -18,6 +18,16 @@ func NewMemberHandler(useCase MemberUseCase) *MemberHandler {
 	}
 }
 
+// GetMembersByBirthdayMonth godoc
+// @Summary 指定された月が誕生日のメンバー一覧を取得するAPI
+// @Tags members
+// @Accept json
+// @Produce json
+// @Param birthday_month query int true "Birthday month (1-12)"
+// @Success 200 {object} dto.GetMembersByBirthdayMonthResponse
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
+// @Router /members [get]
 func (h *MemberHandler) GetMembersByBirthdayMonth(c *gin.Context) {
 	var req memberDto.GetMembersByBirthdayMonthRequest
 
@@ -29,7 +39,9 @@ func (h *MemberHandler) GetMembersByBirthdayMonth(c *gin.Context) {
 		return
 	}
 
-	members, err := h.useCase.GetMembersByBirthdayMonth(req.BirthdayMonth)
+	ctx := c.Request.Context()
+
+	members, err := h.useCase.GetMembersByBirthdayMonth(ctx, req.BirthdayMonth)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errorDto.ErrorResponse{
 			Result:  "error",
