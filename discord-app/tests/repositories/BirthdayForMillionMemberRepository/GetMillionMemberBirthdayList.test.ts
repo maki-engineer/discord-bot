@@ -45,6 +45,7 @@ describe('正常系（getMillionMemberBirthdayList）', () => {
       },
     ];
 
+    // テスト
     await BirthdayForMillionMember.bulkCreate(dummyData, { transaction });
 
     const result = await BirthdayForMillionMemberRepository.getMillionMemberBirthdayList(
