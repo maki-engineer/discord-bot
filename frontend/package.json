@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "compile": "tsc -p ."
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^8.69.0",
