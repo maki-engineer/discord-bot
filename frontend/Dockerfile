@@ -1,10 +1,9 @@
 FROM node:22
 
 WORKDIR /app
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
-RUN npm install
-RUN apt-get update
+RUN npm ci
 
 COPY . .
 CMD ["npm", "run", "dev"]
