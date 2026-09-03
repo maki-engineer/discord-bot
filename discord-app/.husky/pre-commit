@@ -1,1 +1,1 @@
-cd discord-app && npx lint-staged
+cd discord-app && npx lint-staged && echo "pre-commit!"
