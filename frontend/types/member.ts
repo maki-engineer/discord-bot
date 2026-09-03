@@ -4,8 +4,6 @@ export type MemberBirthday = {
   date: number;
 };
 
-// テスト
-
 export type GetMembersBirthdayResponse = {
   result: string;
   members: MemberBirthday[];
