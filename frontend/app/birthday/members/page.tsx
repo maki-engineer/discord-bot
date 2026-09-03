@@ -26,7 +26,7 @@ export default function BirthdayMembersPage() {
         const data = await getBirthdayMembers(month);
         setMembers(data);
       } catch {
-        setError("誕生日メンバーの取得に失敗しました。");
+        setError("誕生日メンバーの取得に失敗しました");
         setMembers([]);
       } finally {
         setIsLoading(false);
