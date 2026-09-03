@@ -49,3 +49,17 @@ services:
       POSTGRES_DB_UNITTEST: ${POSTGRES_DB_UNITTEST}
       POSTGRES_URL: ${POSTGRES_URL}
       TZ: Asia/Tokyo
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      API_BASE_URL: http://localhost:8080
