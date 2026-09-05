@@ -1,0 +1,48 @@
+name: Deploy backend to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/cloud-run-deploy.yml'
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  PROJECT_ID: discord-bot-507515
+  REGION: asia-northeast1
+  IMAGE: asia-northeast1-docker.pkg.dev/discord-bot-507515/discord-bot/backend:latest
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Build and push backend image
+        working-directory: ./backend
+        run: gcloud builds submit --config cloudbuild.yaml .
+
+      - name: Deploy backend to Cloud Run
+        run: >-
+          gcloud run deploy "${{ secrets.CLOUD_RUN_SERVICE }}"
+          --image "${{ env.IMAGE }}"
+          --region "${{ env.REGION }}"
+          --project "${{ env.PROJECT_ID }}"
