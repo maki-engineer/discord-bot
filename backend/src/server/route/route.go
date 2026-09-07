@@ -2,6 +2,7 @@ package route
 
 import (
 	_ "discord-bot/docs"
+	"discord-bot/src/config"
 	"discord-bot/src/presentation/member/handler"
 	"net/http"
 
@@ -29,7 +30,7 @@ func SetupRoutes(memberHandler *handler.MemberHandler) *gin.Engine {
 
 func corsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", config.LoadConfig().AllowURL)
 		c.Writer.Header().Set("Vary", "Origin")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")

@@ -10,6 +10,7 @@ type Config struct {
 	Password string
 	DBName   string
 	URL      string
+	AllowURL string
 }
 
 func LoadConfig() Config {
@@ -17,7 +18,8 @@ func LoadConfig() Config {
 
 	if env == "development" {
 		return Config{
-			URL: os.Getenv("POSTGRES_URL"),
+			URL:      os.Getenv("POSTGRES_URL"),
+			AllowURL: os.Getenv("NEXT_PUBLIC_API_BASE_URL"),
 		}
 	}
 
