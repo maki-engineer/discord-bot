@@ -10,3 +10,6 @@ steps:
 
 images:
   - 'asia-northeast1-docker.pkg.dev/discord-bot-507515/discord-bot/backend:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
