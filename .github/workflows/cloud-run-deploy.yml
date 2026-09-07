@@ -30,6 +30,7 @@ jobs:
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: deploy
+        id: deploy
         uses: google-github-actions/deploy-cloudrun@v3
         with:
           service: discord-bot-backend
