@@ -2,7 +2,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
-      - --service-account=github-actions-deploy@discord-bot-507515.iam.gserviceaccount.com
+      - '--service-account=github-actions-deploy@discord-bot-507515.iam.gserviceaccount.com'
       - '-f'
       - 'Dockerfile.prod'
       - '-t'
