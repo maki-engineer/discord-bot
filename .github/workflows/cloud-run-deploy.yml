@@ -78,6 +78,7 @@ jobs:
         working-directory: ./backend
         run: |
           gcloud builds submit \
+            --service-account=${{ secrets.GCP_SERVICE_ACCOUNT }} \
             --project="${{ env.PROJECT_ID }}" \
             --config=cloudbuild.yaml .
 
