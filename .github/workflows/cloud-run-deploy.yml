@@ -80,7 +80,6 @@ jobs:
           gcloud builds submit \
             --service-account=${{ secrets.GCP_SERVICE_ACCOUNT }} \
             --project="${{ env.PROJECT_ID }}" \
-            --logging=CLOUD_LOGGING_ONLY \
             --config=cloudbuild.yaml .
 
       # -------------------------
