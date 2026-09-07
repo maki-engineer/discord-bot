@@ -35,6 +35,8 @@ jobs:
         with:
           service: discord-bot-backend
           image: ${{ env.IMAGE }}
+          project_id: discord-bot-507515
+          region: asia-northeast1
 
       - name: Use output
         run: curl ${{ steps.deploy.outputs.url }}
