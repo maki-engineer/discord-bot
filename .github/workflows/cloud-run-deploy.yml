@@ -70,6 +70,20 @@ jobs:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
+      - name: Debug Google Cloud authentication
+        run: |
+          echo "=== gcloud account ==="
+          gcloud config get-value account
+
+          echo "=== auth list ==="
+          gcloud auth list
+
+          echo "=== impersonation setting ==="
+          gcloud config get-value auth/impersonate_service_account
+
+          echo "=== project ==="
+          gcloud config get-value project
+
       # -------------------------
       # Build
       # -------------------------
