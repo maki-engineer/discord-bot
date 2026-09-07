@@ -70,16 +70,6 @@ jobs:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
-      - name: Check Google Cloud authentication
-        run: |
-          echo "=== GOOGLE_APPLICATION_CREDENTIALS ==="
-          echo $GOOGLE_APPLICATION_CREDENTIALS
-
-          echo "=== ADC access token ==="
-          gcloud auth application-default print-access-token >/dev/null \
-          && echo "ADC authentication OK"
-
-
       # -------------------------
       # Build
       # -------------------------
@@ -90,6 +80,7 @@ jobs:
           gcloud builds submit \
             --service-account=${{ secrets.GCP_SERVICE_ACCOUNT }} \
             --project="${{ env.PROJECT_ID }}" \
+            --logging=CLOUD_LOGGING_ONLY \
             --config=cloudbuild.yaml .
 
       # -------------------------
