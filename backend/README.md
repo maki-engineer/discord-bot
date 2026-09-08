@@ -14,13 +14,11 @@
 
 ## API
 
-現在公開している主なエンドポイントは次のとおりです。
+↓↓ でAPI定義書を見ることができます。
 
-```text
-GET /api/members?birthday_month={1..12}
-```
+https://discord-bot-backend-758736590208.asia-northeast1.run.app/swagger/index.html
 
-指定した誕生月のメンバーを返します。Swagger UI は API 起動後に `/swagger/index.html` で確認できます。
+Basic認証を設定しているため、見るにはIDとパスワードが必要です。見たい場合は管理者に相談してください。
 
 ## 開発方法
 

@@ -16,7 +16,11 @@ func SetupRoutes(memberHandler *handler.MemberHandler) *gin.Engine {
 	r := gin.Default()
 	r.Use(corsMiddleware())
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	swagger := r.Group("/swagger", setupSwaggerAuth())
+
+	{
+		swagger.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 
 	api := r.Group("/api")
 	members := api.Group("/members")
@@ -26,6 +30,17 @@ func SetupRoutes(memberHandler *handler.MemberHandler) *gin.Engine {
 	}
 
 	return r
+}
+
+func setupSwaggerAuth() gin.HandlerFunc {
+	username := config.LoadConfig().BasicUserName
+	password := config.LoadConfig().BasicPassword
+
+	swaggerAuth := gin.BasicAuth(gin.Accounts{
+		username: password,
+	})
+
+	return swaggerAuth
 }
 
 func corsMiddleware() gin.HandlerFunc {
