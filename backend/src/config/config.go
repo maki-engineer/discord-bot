@@ -5,12 +5,14 @@ import (
 )
 
 type Config struct {
-	Host     string
-	User     string
-	Password string
-	DBName   string
-	URL      string
-	AllowURL string
+	Host          string
+	User          string
+	Password      string
+	DBName        string
+	URL           string
+	AllowURL      string
+	BasicUserName string
+	BasicPassword string
 }
 
 func LoadConfig() Config {
@@ -18,8 +20,10 @@ func LoadConfig() Config {
 
 	if env == "development" {
 		return Config{
-			URL:      os.Getenv("POSTGRES_URL"),
-			AllowURL: os.Getenv("VERCEL_URL"),
+			URL:           os.Getenv("POSTGRES_URL"),
+			AllowURL:      os.Getenv("VERCEL_URL"),
+			BasicUserName: os.Getenv("BASIC_AUTH_USERNAME"),
+			BasicPassword: os.Getenv("BASIC_AUTH_PASSWORD"),
 		}
 	}
 
