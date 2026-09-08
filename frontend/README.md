@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 235bot Frontend
 
-## Getting Started
+235bot のデータをブラウザで確認するための Next.js アプリケーションです。現在は、誕生月を選択して該当するメンバー一覧を表示できます。
 
-First, run the development server:
+## 技術構成
+
+- Next.js 16（App Router）
+- React 19
+- TypeScript
+- Tailwind CSS 4
+
+## 開発方法
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+http://localhost:3000 を開いてください。ルートの Docker Compose を使う場合は、リポジトリのルートで `docker compose up frontend` を実行します。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 環境変数
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`.env.local` に Backend API の URL を設定します。
 
-## Learn More
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
+```
 
-To learn more about Next.js, take a look at the following resources:
+未設定の場合も、開発時は `http://localhost:8080/api` が既定値として使われます。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 画面とデータ取得
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `app/page.tsx`: トップページ
+- `app/birthday/members/page.tsx`: 誕生日メンバー画面
+- `components/BirthdayMonthSelect.tsx`: 誕生月選択
+- `components/BirthdayMemberTable.tsx`: メンバー一覧
+- `lib/api/get-birthday-members.ts`: Backend の `GET /api/members?birthday_month={month}` 呼び出し
 
-## Deploy on Vercel
+API がエラーを返した場合は、画面に取得失敗を表示し、一覧を空に戻します。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## コマンド
+
+```bash
+npm run dev      # 開発サーバー
+npm run build    # 本番ビルド
+npm run start    # 本番ビルドの起動
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

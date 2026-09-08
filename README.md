@@ -1,51 +1,57 @@
-# 235プロダクション専用 235bot
-【235プロダクション】サーバーで稼働している『235bot』です。
+# 235bot
 
-## 機能
-現状以下のような機能があります。
+235プロダクションの Discord サーバーで利用する Bot と、Bot のデータを表示・管理する Web アプリケーションです。
 
-### コマンド
-- 235help
-    - 現状使えるコマンド一覧を知ることが出来ます。
-- 235birthday
-    - 235birthdayコマンドを使用することで、毎月開催されるオンライン飲み会の企画文章を作成することが出来ます。コマンドを使用するときは、開催したい月、日程、時間の**3つ**を**半角数字のみ**、**半角スペースで区切って**入力してください。例）235birthday 12 14 21
-    ※このコマンドは一部のメンバーだけが使えます。
-- 235men
-    - 235menコマンドを使用することで、毎月開催される235士官学校🌹の日程を決める文章を作成することが出来ます。コマンドを使用するときは、開催したい日程を**2～10個**、**半角数字のみ**で入力してください。例）235men 12 14 16 17
-    ※このコマンドは一部のメンバーだけが使えます。
-- 235roomdivision
-    - 235roomdivisionコマンドを使用することで、特定のボイスチャンネルに参加しているメンバーが10以上になったときに、部屋を分けることが出来ます。
-    なお、ボイスチャンネルに参加しているメンバーが**10人未満**のときは分けることが出来ません。また、235roomdivisionコマンドは、特定のボイスチャンネルに参加しているメンバーのみが使用できます。
+## プロジェクト構成
 
-それ以外にもメンバーの誕生日をお祝いする機能など色々あります。さらに詳細を知りたい場合は、「235help」と入力してみてください。
+| フォルダ | 役割 | 主な技術 |
+| --- | --- | --- |
+| `discord-app` | Discord Bot 本体、Bot 用データの管理 | TypeScript, discord.js, Sequelize, PostgreSQL |
+| `backend` | メンバー情報などを取得する API | Go, Gin, GORM, PostgreSQL |
+| `frontend` | 誕生日メンバーなどを表示する Web UI | Next.js, React, TypeScript |
+| `.github` | CI/CD とレビュー用テンプレート | GitHub Actions |
 
-## 開発言語・ツールなど
-### 言語
-- TypeScript
+Bot 用の既存データ、マイグレーション、シーダーは `discord-app` にあります。`backend` は同じ PostgreSQL のデータを API として提供し、`frontend` はその API を利用します。
 
-### パラダイム
-- オブジェクト指向
+## 開発環境
 
-### DB
-- PostgreSQL
+- Node.js 22 以上
+- Go（`backend/go.mod` のバージョンに対応するもの）
+- Docker / Docker Compose
+- PostgreSQL（Docker Compose を使う場合は不要）
 
-### その他ツール
-- リンター
-    - ESLint（TypeScriptも対応させてます）
-- テストツール
-    - Jest（TypeScript化してます）
-- ORM
-    - Sequelize（TypeScript化してます）
-- CI・CD
-    - GitHub Actions
-        - CIとして、テスト、リンターチェックの自動化、CDとして6時間おきにGitHub Actions内で自動で235botを起動させるようにしてます。
-- Docker
+環境変数は `.env.example` を参考に `.env` を作成してください。Discord のトークンや Google Cloud の認証情報などの秘密情報は、リポジトリへコミットしないでください。
 
-## 稼働時間について
-現状235botは以下の時間帯稼動しています。
-5時間55分ごとに235botを停止させるようにしているのは、GitHub Actions の定期実行の実行時間の上限が6時間になっているためです。
+## 起動方法
 
-- 05:00～10:55（若干ラグあり）
-- 11:00～16:55（若干ラグあり）
-- 17:00～22:55（若干ラグあり）
-- 23:00～04:55（若干ラグあり）
+リポジトリのルートで、必要なサービスを起動します。
+
+```bash
+docker compose up --build
+```
+
+起動後の主な接続先は次のとおりです。
+
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8080
+- Backend Swagger: http://localhost:8080/swagger/index.html
+- PostgreSQL（テスト用）: localhost:5433
+- VOICEVOX Engine: http://localhost:50021
+
+個別に開発する場合は、各フォルダの README を参照してください。
+
+## 各プロジェクトの詳細
+
+- Discord Bot の機能、技術、コマンド、稼働時間: [`discord-app/README.md`](discord-app/README.md)
+- Backend API の構成、エンドポイント、テスト、デプロイ: [`backend/README.md`](backend/README.md)
+- Frontend の画面、API 接続、開発方法: [`frontend/README.md`](frontend/README.md)
+- Google Cloud の Terraform 管理方針: [`infra/README.md`](infra/README.md)
+- GitHub Actions と自動化: [`.github/README.md`](.github/README.md)
+
+## テスト・品質チェック
+
+各プロジェクトのテスト・Lint 手順は、それぞれの README と設定ファイルを参照してください。Backend の詳細な手順は `backend/Taskfile.yml` に定義されています。
+
+## デプロイ
+
+Backend は `.github/workflows/cloud-run-deploy.yml` により、`main` ブランチへの変更時に Google Cloud Run へデプロイされます。Frontend と Discord Bot の運用方法や変更時の注意点は、それぞれの README にまとめています。
