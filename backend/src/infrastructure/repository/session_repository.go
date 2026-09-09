@@ -34,3 +34,10 @@ func (r *SessionRepository) GetSessionByID(ctx context.Context, sessionId string
 		ExpiresAt: session.ExpiresAt,
 	}, nil
 }
+
+func (r *SessionRepository) CreateSession(ctx context.Context, session *auth.Session) error {
+	return r.db.WithContext(ctx).Create(&model.Session{
+		SessionID: session.SessionID,
+		ExpiresAt: session.ExpiresAt,
+	}).Error
+}

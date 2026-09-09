@@ -29,3 +29,7 @@ func (s *SessionService) GetSessionByID(ctx context.Context, sessionID string) (
 
 	return session, nil
 }
+
+func (s *SessionService) CreateSession(ctx context.Context, session *auth.Session) error {
+	return s.repo.CreateSession(ctx, session)
+}

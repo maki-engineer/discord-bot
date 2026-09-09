@@ -5,14 +5,20 @@ import (
 )
 
 type Config struct {
-	Host          string
-	User          string
-	Password      string
-	DBName        string
-	URL           string
-	AllowURL      string
-	BasicUserName string
-	BasicPassword string
+	Host                string
+	User                string
+	Password            string
+	DBName              string
+	URL                 string
+	AllowURL            string
+	FrontendURL         string
+	BasicUserName       string
+	BasicPassword       string
+	DiscordClientID     string
+	DiscordClientSecret string
+	DiscordRedirectURI  string
+	DiscordGuildID      string
+	DiscordBotToken     string
 }
 
 func LoadConfig() Config {
@@ -20,10 +26,16 @@ func LoadConfig() Config {
 
 	if env == "development" {
 		return Config{
-			URL:           os.Getenv("POSTGRES_URL"),
-			AllowURL:      os.Getenv("VERCEL_URL"),
-			BasicUserName: os.Getenv("BASIC_AUTH_USERNAME"),
-			BasicPassword: os.Getenv("BASIC_AUTH_PASSWORD"),
+			URL:                 os.Getenv("POSTGRES_URL"),
+			AllowURL:            os.Getenv("VERCEL_URL"),
+			FrontendURL:         os.Getenv("FRONTEND_URL"),
+			BasicUserName:       os.Getenv("BASIC_AUTH_USERNAME"),
+			BasicPassword:       os.Getenv("BASIC_AUTH_PASSWORD"),
+			DiscordClientID:     os.Getenv("DISCORD_CLIENT_ID"),
+			DiscordClientSecret: os.Getenv("DISCORD_CLIENT_SECRET"),
+			DiscordRedirectURI:  os.Getenv("DISCORD_REDIRECT_URI"),
+			DiscordGuildID:      os.Getenv("DISCORD_GUILD_ID"),
+			DiscordBotToken:     os.Getenv("DISCORD_BOT_TOKEN"),
 		}
 	}
 
