@@ -27,7 +27,7 @@ definitions:
     type: object
 info:
   contact: {}
-  description: 235botのデータを取得・操作するためのAPI
+  description: 235botのデータを取得・操作したり、認証処理をするためのAPI
   license:
     name: Maki
   title: 235Bot API

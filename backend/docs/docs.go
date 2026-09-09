@@ -112,7 +112,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "235Bot API",
-	Description:      "235botのデータを取得・操作するためのAPI",
+	Description:      "235botのデータを取得・操作したり、認証処理をするためのAPI",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "235botのデータを取得・操作するためのAPI",
+        "description": "235botのデータを取得・操作したり、認証処理をするためのAPI",
         "title": "235Bot API",
         "contact": {},
         "license": {
