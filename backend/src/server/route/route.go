@@ -4,6 +4,7 @@ import (
 	_ "discord-bot/docs"
 	"discord-bot/src/config"
 	"discord-bot/src/presentation/member/handler"
+	"discord-bot/src/presentation/middleware"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +13,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func SetupRoutes(memberHandler *handler.MemberHandler) *gin.Engine {
+func SetupRoutes(memberHandler *handler.MemberHandler, sessionService middleware.SessionService) *gin.Engine {
 	r := gin.Default()
 	r.Use(corsMiddleware())
 
@@ -23,11 +24,20 @@ func SetupRoutes(memberHandler *handler.MemberHandler) *gin.Engine {
 	}
 
 	api := r.Group("/api")
+	api.Use(middleware.AuthMiddleware(sessionService))
 	members := api.Group("/members")
 
 	{
 		members.GET("", memberHandler.GetMembersByBirthdayMonth)
 	}
+
+	// TODO: Discord認証処理を実装することになったら以下のAPIで実装していく
+	// discord := r.Group("/discord")
+
+	// {
+	// 	discord.GET("/auth")
+	// 	discord.GET("/auth/callback")
+	// }
 
 	return r
 }

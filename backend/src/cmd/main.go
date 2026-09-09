@@ -1,6 +1,7 @@
 package main
 
 import (
+	"discord-bot/src/application/auth/service"
 	"discord-bot/src/application/member/usecase"
 	"discord-bot/src/config"
 	"discord-bot/src/infrastructure/db"
@@ -13,7 +14,7 @@ import (
 // @title 235Bot API
 // @version 1.0
 // @license.name Maki
-// @description 235botのデータを取得・操作するためのAPI
+// @description 235botのデータを取得・操作したり、認証処理をするためのAPI
 // @BasePath /api
 func main() {
 	config := config.LoadConfig()
@@ -22,11 +23,13 @@ func main() {
 		panic(err)
 	}
 
-	repository := repository.NewMemberRepository(db)
-	useCase := usecase.NewMemberUseCase(repository)
+	memberRepository := repository.NewMemberRepository(db)
+	sessionRepository := repository.NewSessionRepository(db)
+	useCase := usecase.NewMemberUseCase(memberRepository)
 	handler := handler.NewMemberHandler(useCase)
+	middleware := service.NewSessionService(sessionRepository)
 
-	r := route.SetupRoutes(handler)
+	r := route.SetupRoutes(handler, middleware)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)
