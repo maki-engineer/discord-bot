@@ -54,8 +54,14 @@ func setupSwaggerAuth() gin.HandlerFunc {
 }
 
 func corsMiddleware() gin.HandlerFunc {
+	allowURL := config.LoadConfig().AllowURL
+
+	if allowURL == "" {
+		allowURL = "http://localhost:3000"
+	}
+
 	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", config.LoadConfig().AllowURL)
+		c.Writer.Header().Set("Access-Control-Allow-Origin", allowURL)
 		c.Writer.Header().Set("Vary", "Origin")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
