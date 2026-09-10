@@ -6,7 +6,6 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -110,7 +109,6 @@ func (h *Handler) Callback(c *gin.Context) {
 		redirectWithError(c, frontendURL, "discord_login_failed")
 		return
 	}
-	log.Println("discord auth: login succeeded")
 
 	secure := strings.HasPrefix(h.config.RedirectURI, "https://")
 	if secure {

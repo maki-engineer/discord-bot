@@ -1,10 +1,19 @@
 require('dotenv').config();
 
 export = {
-  development: {
+  production: {
     url: process.env.POSTGRES_URL!,
     dialect: 'postgres',
     dialectOptions: { ssl: { require: true } },
+    timezone: '+09:00',
+  },
+  development: {
+    username: process.env.POSTGRES_USER_DEVELOPMENT!,
+    password: process.env.POSTGRES_PASSWORD_DEVELOPMENT!,
+    database: process.env.POSTGRES_DB_DEVELOPMENT!,
+    host: '127.0.0.1',
+    port: 5434,
+    dialect: 'postgres',
     timezone: '+09:00',
   },
   unittest: {
