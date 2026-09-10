@@ -6,18 +6,38 @@ import DeleteMessage from './deletemessage';
 import Session from './session';
 import config from '../config/config';
 
-const env = process.env.NODE_ENV || 'development';
+type Environment = 'production' | 'development' | 'unittest';
+
+let env: Environment = 'development';
+
+if (process.env.NODE_ENV === 'production') {
+  env = 'production';
+} else if (process.env.NODE_ENV === 'unittest') {
+  env = 'unittest';
+}
 
 let sequelize!: Sequelize;
 
-if (env === 'development') {
-  const developmentConfig = config[env];
+if (env === 'production') {
+  const productionConfig = config[env];
 
-  sequelize = new Sequelize(developmentConfig.url, {
+  sequelize = new Sequelize(productionConfig.url, {
     dialectOptions: {
       ssl: { require: true },
     },
   });
+} else if (env === 'development') {
+  const developmentConfig = config[env];
+
+  sequelize = new Sequelize(
+    developmentConfig.database,
+    developmentConfig.username,
+    developmentConfig.password,
+    {
+      ...developmentConfig,
+      dialect: developmentConfig.dialect as Dialect,
+    },
+  );
 } else if (env === 'unittest') {
   const unittestConfig = config[env];
 

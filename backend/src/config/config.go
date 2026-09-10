@@ -24,9 +24,27 @@ type Config struct {
 func LoadConfig() Config {
 	env := os.Getenv("APP_ENV")
 
-	if env == "development" {
+	if env == "production" {
 		return Config{
 			URL:                 os.Getenv("POSTGRES_URL"),
+			AllowURL:            os.Getenv("VERCEL_URL"),
+			FrontendURL:         os.Getenv("FRONTEND_URL"),
+			BasicUserName:       os.Getenv("BASIC_AUTH_USERNAME"),
+			BasicPassword:       os.Getenv("BASIC_AUTH_PASSWORD"),
+			DiscordClientID:     os.Getenv("DISCORD_CLIENT_ID"),
+			DiscordClientSecret: os.Getenv("DISCORD_CLIENT_SECRET"),
+			DiscordRedirectURI:  os.Getenv("DISCORD_REDIRECT_URI"),
+			DiscordGuildID:      os.Getenv("DISCORD_GUILD_ID"),
+			DiscordBotToken:     os.Getenv("DISCORD_BOT_TOKEN"),
+		}
+	}
+
+	if env == "development" {
+		return Config{
+			Host:                "development-db",
+			User:                os.Getenv("POSTGRES_USER_DEVELOPMENT"),
+			Password:            os.Getenv("POSTGRES_PASSWORD_DEVELOPMENT"),
+			DBName:              os.Getenv("POSTGRES_DB_DEVELOPMENT"),
 			AllowURL:            os.Getenv("VERCEL_URL"),
 			FrontendURL:         os.Getenv("FRONTEND_URL"),
 			BasicUserName:       os.Getenv("BASIC_AUTH_USERNAME"),
