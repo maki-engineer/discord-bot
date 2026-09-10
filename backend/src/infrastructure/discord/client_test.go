@@ -21,7 +21,7 @@ func TestClient_ExchangeCode(t *testing.T) {
 	client := NewClient(config.Config{
 		DiscordClientID:     "client-id",
 		DiscordClientSecret: "client-secret",
-		DiscordRedirectURI:  "http://localhost/callback",
+		DiscordRedirectURI:  "http://localhost:8080/discord/auth/callback",
 	})
 	client.httpClient = &http.Client{Transport: roundTripFunc(func(request *http.Request) (*http.Response, error) {
 		body, _ := io.ReadAll(request.Body)

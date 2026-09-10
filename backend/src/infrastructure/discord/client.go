@@ -30,12 +30,16 @@ func NewClient(cfg config.Config) *Client {
 }
 
 func (c *Client) ExchangeCode(ctx context.Context, code string) (string, error) {
+	redirectURI := c.config.DiscordRedirectURI
+	if redirectURI == "" {
+		redirectURI = "http://localhost:8080/discord/auth/callback"
+	}
 	form := url.Values{
 		"client_id":     []string{c.config.DiscordClientID},
 		"client_secret": []string{c.config.DiscordClientSecret},
 		"grant_type":    []string{"authorization_code"},
 		"code":          []string{code},
-		"redirect_uri":  []string{c.config.DiscordRedirectURI},
+		"redirect_uri":  []string{redirectURI},
 	}
 	request, err := http.NewRequestWithContext(ctx, http.MethodPost, "https://discord.com/api/oauth2/token", strings.NewReader(form.Encode()))
 	if err != nil {
