@@ -79,7 +79,6 @@ func (h *Handler) Auth(c *gin.Context) {
 // @Failure 302
 // @Router /discord/auth/callback [get]
 func (h *Handler) Callback(c *gin.Context) {
-	log.Println("discord oauth: callback started")
 	frontendURL := h.config.FrontendURL
 	if frontendURL == "" {
 		frontendURL = "http://localhost:3000"
@@ -94,7 +93,6 @@ func (h *Handler) Callback(c *gin.Context) {
 		redirectWithError(c, frontendURL, "invalid_oauth_state")
 		return
 	}
-	log.Println("discord oauth: state validation succeeded")
 	c.SetCookie("discord_oauth_state", "", -1, "/", "", false, true)
 
 	code := c.Query("code")
@@ -102,6 +100,8 @@ func (h *Handler) Callback(c *gin.Context) {
 		redirectWithError(c, frontendURL, "missing_oauth_code")
 		return
 	}
+
+	log.Println("discord oauth: code validation succeeded")
 
 	sessionID, err := h.useCase.Login(c.Request.Context(), code)
 	if err != nil {
