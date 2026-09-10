@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -46,13 +45,13 @@ func (c *Client) ExchangeCode(ctx context.Context, code string) (string, error) 
 
 	var response tokenResponse
 	if err := c.doJSON(request, &response); err != nil {
-		log.Printf("discord ExchangeCode: doJSON failed: %v", err)
 		return "", err
 	}
-	log.Println("discord ExchangeCode: response success")
+
 	if response.AccessToken == "" {
 		return "", fmt.Errorf("discord returned an empty access token")
 	}
+
 	return response.AccessToken, nil
 }
 
@@ -104,10 +103,8 @@ func (c *Client) newAuthenticatedRequest(ctx context.Context, method string, end
 }
 
 func (c *Client) doJSON(request *http.Request, target interface{}) error {
-	log.Println("discord doJSON: request start")
 	response, err := c.httpClient.Do(request)
 	if err != nil {
-		log.Printf("discord doJSON: request failed: %v", err)
 		return err
 	}
 
@@ -115,19 +112,13 @@ func (c *Client) doJSON(request *http.Request, target interface{}) error {
 		_ = response.Body.Close()
 	}()
 
-	log.Printf("discord doJSON: response received, status=%d", response.StatusCode)
-
 	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
-		log.Printf("discord doJSON: unexpected status=%d", response.StatusCode)
 		return fmt.Errorf("discord API returned status %d", response.StatusCode)
 	}
 
 	if err := json.NewDecoder(response.Body).Decode(target); err != nil {
-		log.Printf("discord doJSON: JSON decode failed: %v", err)
 		return err
 	}
-
-	log.Println("discord doJSON: JSON decode success")
 
 	return nil
 }
