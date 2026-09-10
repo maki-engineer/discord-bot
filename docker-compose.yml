@@ -6,6 +6,11 @@ services:
     container_name: discord-app
     volumes:
       - ./discord-app:/usr/src/app
+    depends_on:
+      unittest-db:
+        condition: service_healthy
+      development-db:
+        condition: service_healthy
 
   unittest-db:
     # postgres:latest はメジャーバージョンが勝手に上がりCIが壊れるためピン留めする

@@ -11,7 +11,8 @@
     "start:dev": "nodemon build/src/main.js",
     "compile": "tsc -p .",
     "migrate": "npx sequelize-cli db:migrate --env unittest",
-    "seed": "sequelize db:seed:all",
+    "migrate:development": "npx sequelize-cli db:migrate --env development",
+    "seed:development": "npx sequelize-cli db:seed:all --env development",
     "prepare": "cd .. && husky discord-app/.husky"
   },
   "keywords": [],

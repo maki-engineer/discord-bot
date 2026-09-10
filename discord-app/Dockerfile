@@ -8,4 +8,4 @@ RUN apt-get update
 RUN apt-get -y install ffmpeg
 
 COPY . .
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npm run migrate:development && npm run seed:development && npm run start"]
