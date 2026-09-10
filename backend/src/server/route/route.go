@@ -61,7 +61,7 @@ func corsMiddleware() gin.HandlerFunc {
 	}
 
 	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", config.LoadConfig().AllowURL)
+		c.Writer.Header().Set("Access-Control-Allow-Origin", allowURL)
 		c.Writer.Header().Set("Vary", "Origin")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
