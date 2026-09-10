@@ -101,8 +101,6 @@ func (h *Handler) Callback(c *gin.Context) {
 		return
 	}
 
-	log.Println("discord oauth: code validation succeeded")
-
 	sessionID, err := h.useCase.Login(c.Request.Context(), code)
 	if err != nil {
 		if errors.Is(err, auth.ErrNotGuildMember) {

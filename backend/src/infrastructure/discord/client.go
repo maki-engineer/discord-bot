@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -43,10 +44,13 @@ func (c *Client) ExchangeCode(ctx context.Context, code string) (string, error) 
 	}
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
+	log.Println("discord ExchangeCode: request success")
+
 	var response tokenResponse
 	if err := c.doJSON(request, &response); err != nil {
 		return "", err
 	}
+	log.Println("discord ExchangeCode: response success")
 	if response.AccessToken == "" {
 		return "", fmt.Errorf("discord returned an empty access token")
 	}
