@@ -2,10 +2,13 @@ package main
 
 import (
 	"discord-bot/src/application/auth/service"
+	authUsecase "discord-bot/src/application/auth/usecase"
 	"discord-bot/src/application/member/usecase"
 	"discord-bot/src/config"
 	"discord-bot/src/infrastructure/db"
+	discordInfrastructure "discord-bot/src/infrastructure/discord"
 	"discord-bot/src/infrastructure/repository"
+	discordHandler "discord-bot/src/presentation/discord"
 	"discord-bot/src/presentation/member/handler"
 	"discord-bot/src/server/route"
 	"log"
@@ -28,8 +31,15 @@ func main() {
 	useCase := usecase.NewMemberUseCase(memberRepository)
 	handler := handler.NewMemberHandler(useCase)
 	middleware := service.NewSessionService(sessionRepository)
+	discordGateway := discordInfrastructure.NewClient(config)
+	discordLoginUseCase := authUsecase.NewDiscordAuthUseCase(discordGateway, sessionRepository)
+	discordAuthHandler := discordHandler.NewHandler(discordHandler.OAuthConfig{
+		ClientID:    config.DiscordClientID,
+		RedirectURI: config.DiscordRedirectURI,
+		FrontendURL: config.FrontendURL,
+	}, discordLoginUseCase)
 
-	r := route.SetupRoutes(handler, middleware)
+	r := route.SetupRoutes(handler, middleware, discordAuthHandler)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)

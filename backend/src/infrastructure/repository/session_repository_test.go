@@ -5,7 +5,6 @@ import (
 	"discord-bot/src/config"
 	"discord-bot/src/domain/auth"
 	"discord-bot/src/infrastructure/db"
-	"discord-bot/src/infrastructure/model"
 	"reflect"
 	"testing"
 	"time"
@@ -29,16 +28,15 @@ func TestSessionRepository_GetSessionByID(t *testing.T) {
 	}
 	expiresAt := time.Date(2026, 10, 1, 10, 0, 0, 0, jst)
 
-	session := model.Session{
+	session := &auth.Session{
 		SessionID: sessionID,
 		ExpiresAt: expiresAt,
 	}
 
-	if err := db.Create(&session).Error; err != nil {
+	repo := NewSessionRepository(db)
+	if err := repo.CreateSession(context.Background(), session); err != nil {
 		t.Fatalf("Failed to insert test data: %v", err)
 	}
-
-	repo := NewSessionRepository(db)
 
 	expected := &auth.Session{
 		SessionID: sessionID,

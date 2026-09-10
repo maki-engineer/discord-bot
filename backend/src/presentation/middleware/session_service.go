@@ -7,4 +7,5 @@ import (
 
 type SessionService interface {
 	GetSessionByID(ctx context.Context, sessionID string) (*auth.Session, error)
+	CreateSession(ctx context.Context, session *auth.Session) error
 }

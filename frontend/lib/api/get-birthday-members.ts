@@ -7,6 +7,7 @@ export async function getBirthdayMembers(
     process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080/api";
   const response = await fetch(
     `${API_BASE_URL}/members?birthday_month=${month}`,
+    { credentials: "include" },
   );
 
   if (!response.ok) {

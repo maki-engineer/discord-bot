@@ -17,6 +17,10 @@ func (m *MockSessionRepository) GetSessionByID(ctx context.Context, sessionID st
 	return m.Session, m.err
 }
 
+func (m *MockSessionRepository) CreateSession(ctx context.Context, session *auth.Session) error {
+	return m.err
+}
+
 func TestSessionService_GetSessionByID(t *testing.T) {
 	sessionID := "342k5jk352kj"
 	jst, err := time.LoadLocation("Asia/Tokyo")

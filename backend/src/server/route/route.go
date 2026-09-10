@@ -3,6 +3,7 @@ package route
 import (
 	_ "discord-bot/docs"
 	"discord-bot/src/config"
+	discordHandler "discord-bot/src/presentation/discord"
 	"discord-bot/src/presentation/member/handler"
 	"discord-bot/src/presentation/middleware"
 	"net/http"
@@ -13,7 +14,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func SetupRoutes(memberHandler *handler.MemberHandler, sessionService middleware.SessionService) *gin.Engine {
+func SetupRoutes(memberHandler *handler.MemberHandler, sessionService middleware.SessionService, discordAuthHandler *discordHandler.Handler) *gin.Engine {
 	r := gin.Default()
 	r.Use(corsMiddleware())
 
@@ -31,13 +32,12 @@ func SetupRoutes(memberHandler *handler.MemberHandler, sessionService middleware
 		members.GET("", memberHandler.GetMembersByBirthdayMonth)
 	}
 
-	// TODO: Discord認証処理を実装することになったら以下のAPIで実装していく
-	// discord := r.Group("/discord")
+	discord := r.Group("/discord")
 
-	// {
-	// 	discord.GET("/auth")
-	// 	discord.GET("/auth/callback")
-	// }
+	{
+		discord.GET("/auth", discordAuthHandler.Auth)
+		discord.GET("/auth/callback", discordAuthHandler.Callback)
+	}
 
 	return r
 }
@@ -59,6 +59,7 @@ func corsMiddleware() gin.HandlerFunc {
 		c.Writer.Header().Set("Vary", "Origin")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		if c.Request.Method == http.MethodOptions {
 			c.AbortWithStatus(http.StatusNoContent)
