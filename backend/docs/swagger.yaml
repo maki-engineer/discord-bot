@@ -33,6 +33,43 @@ info:
   title: 235Bot API
   version: "1.0"
 paths:
+  /discord/auth:
+    get:
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Found
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Discord OAuth2 認証API
+      tags:
+      - discord
+  /discord/auth/callback:
+    get:
+      parameters:
+      - description: Discord OAuth2認証コード
+        in: query
+        name: code
+        type: string
+      - description: OAuth2 state
+        in: query
+        name: state
+        type: string
+      - description: Discord OAuth2認証エラー
+        in: query
+        name: error
+        type: string
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Found
+      summary: Discord OAuth2 認証コールバックAPI
+      tags:
+      - discord
   /members:
     get:
       consumes:
