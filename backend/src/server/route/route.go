@@ -33,8 +33,11 @@ func SetupRoutes(memberHandler *handler.MemberHandler, sessionService middleware
 	}
 
 	discord := r.Group("/discord")
-	discord.GET("/auth", discordAuthHandler.Auth)
-	discord.GET("/auth/callback", discordAuthHandler.Callback)
+
+	{
+		discord.GET("/auth", discordAuthHandler.Auth)
+		discord.GET("/auth/callback", discordAuthHandler.Callback)
+	}
 
 	return r
 }

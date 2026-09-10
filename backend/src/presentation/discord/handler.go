@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"discord-bot/src/domain/auth"
+	"discord-bot/src/presentation/dto"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,10 +35,20 @@ func NewHandler(cfg OAuthConfig, useCase AuthUseCase) *Handler {
 	return &Handler{config: cfg, useCase: useCase}
 }
 
+// Auth godoc
+// @Summary Discord OAuth2 認証API
+// @Tags discord
+// @Produce json
+// @Success 302
+// @Failure 500 {object} dto.ErrorResponse
+// @Router /discord/auth [get]
 func (h *Handler) Auth(c *gin.Context) {
 	state, err := randomToken(32)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed to create OAuth state"})
+		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{
+			Result:  "error",
+			Message: err.Error(),
+		})
 		return
 	}
 
@@ -56,6 +67,16 @@ func (h *Handler) Auth(c *gin.Context) {
 	c.Redirect(http.StatusFound, "https://discord.com/oauth2/authorize?"+query.Encode())
 }
 
+// Callback godoc
+// @Summary Discord OAuth2 認証コールバックAPI
+// @Tags discord
+// @Produce json
+// @Param code query string false "Discord OAuth2認証コード"
+// @Param state query string false "OAuth2 state"
+// @Param error query string false "Discord OAuth2認証エラー"
+// @Success 302
+// @Failure 302
+// @Router /discord/auth/callback [get]
 func (h *Handler) Callback(c *gin.Context) {
 	frontendURL := h.config.FrontendURL
 	if frontendURL == "" {
