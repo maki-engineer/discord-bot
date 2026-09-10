@@ -48,7 +48,7 @@ func (c *Client) ExchangeCode(ctx context.Context, code string) (string, error) 
 		return "", err
 	}
 	if response.AccessToken == "" {
-		return "", fmt.Errorf("Discord returned an empty access token")
+		return "", fmt.Errorf("discord returned an empty access token")
 	}
 	return response.AccessToken, nil
 }
@@ -77,12 +77,16 @@ func (c *Client) VerifyGuildMember(ctx context.Context, userID string) error {
 	if err != nil {
 		return err
 	}
-	defer response.Body.Close()
+
+	defer func() {
+		_ = response.Body.Close()
+	}()
+
 	if response.StatusCode == http.StatusNotFound {
 		return auth.ErrNotGuildMember
 	}
 	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
-		return fmt.Errorf("Discord guild member lookup returned status %d", response.StatusCode)
+		return fmt.Errorf("discord guild member lookup returned status %d", response.StatusCode)
 	}
 	return nil
 }
@@ -101,9 +105,13 @@ func (c *Client) doJSON(request *http.Request, target interface{}) error {
 	if err != nil {
 		return err
 	}
-	defer response.Body.Close()
+
+	defer func() {
+		_ = response.Body.Close()
+	}()
+
 	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
-		return fmt.Errorf("Discord API returned status %d", response.StatusCode)
+		return fmt.Errorf("discord API returned status %d", response.StatusCode)
 	}
 	return json.NewDecoder(response.Body).Decode(target)
 }
